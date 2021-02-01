@@ -19,7 +19,7 @@ router.get('/student/:id',checkToken, getStudentByStudentId);
 router.post('/Login', Login)
 router.patch('/student/:id',checkToken, updateStudent);
 router.delete('/student/:id',checkToken, deleteStudent);
-router.post('/student/data', addStudentData);
+router.post('/student/data',checkToken, addStudentData);
 router.delete('/student/data/:id', deleteStudentData);
 module.exports = {
     routes: router

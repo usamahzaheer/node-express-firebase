@@ -107,6 +107,24 @@ const deleteStudent = async (req, res, next) => {
     res.status(400).send(error.message);
   }
 };
+const addStudentData = async (req, res, next) => {
+  try {
+    const data = req.body;
+    await firestore.collection("/students/yLNASpspyCytIyn0bwmi/data").doc().set(data);
+    res.send("Record saved successfuly");
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+const deleteStudentData = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    await firestore.collection("/students/yLNASpspyCytIyn0bwmi/data").doc(id).delete();
+    res.send("Record deleted successfuly");
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
 module.exports = {
   addStudent,
   getAllStudents,
@@ -114,4 +132,6 @@ module.exports = {
   Login,
   updateStudent,
   deleteStudent,
+  addStudentData,
+  deleteStudentData
 };

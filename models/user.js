@@ -1,4 +1,4 @@
-class Student{
+class User{
     constructor(id, firstName, email, lastName, password, phoneNumber) {
         this.id = id;
         this.firstName= firstName;
@@ -11,4 +11,4 @@ class Student{
         return this.id + ', ' + this.firstName + ', ' + this.email + ', ' + this.lastName + ', ' + this.password + ', ' + this.phoneNumber;
     }
 }
-module.exports = Student;
+module.exports = User;

@@ -1,29 +1,29 @@
 "use strict";
 
 const firebase = require("../db");
-const Student = require("../models/student");
+const User = require("../models/user");
 const firestore = firebase.firestore();
 const { sign } = require("jsonwebtoken");
 
-const addStudent = async (req, res, next) => {
+const addUser = async (req, res, next) => {
   try {
     const data = req.body;
-    await firestore.collection("students").doc().set(data);
+    await firestore.collection("users").doc().set(data);
     res.send("Record saved successfuly");
   } catch (error) {
     res.status(400).send(error.message);
   }
 };
-const getAllStudents = async (req, res, next) => {
+const getAllUsers = async (req, res, next) => {
   try {
-    const students = await firestore.collection("students");
-    const data = await students.get();
-    const studentsArray = [];
+    const users = await firestore.collection("users");
+    const data = await users.get();
+    const usersArray = [];
     if (data.empty) {
-      res.status(404).send("No student record found");
+      res.status(404).send("No user record found");
     } else {
       data.forEach((doc) => {
-        const student = new Student(
+        const user = new User(
           doc.id,
           doc.data().firstName,
           doc.data().email,
@@ -31,21 +31,21 @@ const getAllStudents = async (req, res, next) => {
           doc.data().password,
           doc.data().phoneNumber
         );
-        studentsArray.push(student);
+        usersArray.push(user);
       });
-      res.send(studentsArray);
+      res.send(usersArray);
     }
   } catch (error) {
     res.status(400).send(error.message);
   }
 };
 
-const getStudentByStudentId = async (req, res, next) => {
+const getUserByUserId = async (req, res, next) => {
   try {
-    const student = await firestore.collection("students").doc(req.params.id);
-    const data = await student.get();
+    const user = await firestore.collection("users").doc(req.params.id);
+    const data = await user.get();
     if (!data.exists) {
-      res.status(404).send("Student with the given ID not found");
+      res.status(404).send("user with the given ID not found");
     } else {
       res.send(data.data());
     }
@@ -57,10 +57,10 @@ const getStudentByStudentId = async (req, res, next) => {
 
 const Login = async (req, res, next) => {
   try {
-    const snapshot = await firestore.collection("students").get();
+    const snapshot = await firestore.collection("users").get();
 
     if (snapshot.empty) {
-      res.status(404).send("No student record found");
+      res.status(404).send("No user record found");
     } else {
       const passwordList = snapshot.docs.map((doc) => doc.data().password);
       const emailList = snapshot.docs.map((doc) => doc.data().email);
@@ -86,52 +86,33 @@ const Login = async (req, res, next) => {
 };
 
 
-const updateStudent = async (req, res, next) => {
+const updateUser = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = req.body;
-    const student = await firestore.collection("students").doc(id);
-    await student.update(data);
-    res.send("Student record updated successfuly");
+    const user = await firestore.collection("users").doc(id);
+    await user.update(data);
+    res.send("user record updated successfuly");
   } catch (error) {
     res.status(400).send(error.message);
   }
 };
 
-const deleteStudent = async (req, res, next) => {
+const deleteUser = async (req, res, next) => {
   try {
     const id = req.params.id;
-    await firestore.collection("students").doc(id).delete();
+    await firestore.collection("users").doc(id).delete();
     res.send("Record deleted successfuly");
   } catch (error) {
     res.status(400).send(error.message);
   }
 };
-const addStudentData = async (req, res, next) => {
-  try {
-    const data = req.body;
-    await firestore.collection("/students/yLNASpspyCytIyn0bwmi/data").doc().set(data);
-    res.send("Record saved successfuly");
-  } catch (error) {
-    res.status(400).send(error.message);
-  }
-};
-const deleteStudentData = async (req, res, next) => {
-  try {
-    const id = req.params.id;
-    await firestore.collection("/students/yLNASpspyCytIyn0bwmi/data").doc(id).delete();
-    res.send("Record deleted successfuly");
-  } catch (error) {
-    res.status(400).send(error.message);
-  }
-};
+
 module.exports = {
-  addStudent,
-  getAllStudents,
-  getStudentByStudentId,
+  addUser,
+  getAllUsers,
+  getUserByUserId,
   Login,
-  updateStudent,
-  deleteStudent,
-  addStudentData,
-  deleteStudentData
+  updateUser,
+  deleteUser,
 };
